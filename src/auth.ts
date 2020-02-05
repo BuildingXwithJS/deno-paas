@@ -1,8 +1,23 @@
+import makeJwt from "https://deno.land/x/djwt/create.ts";
+import validateJwt from "https://deno.land/x/djwt/validate.ts";
 import { hmac } from "https://denopkg.com/chiefbiiko/hmac/mod.ts";
 import db from "./db.ts";
 
+// jwt config
+const jwtKey = "abc123"
+const jwtHeader = {
+  alg: "HS512",
+  typ: "JWT",
+};
+
+// hashing config
 const secureKey = "1234567890";
 const hash = password => hmac("sha256", secureKey, password, "utf8", "hex");
+
+
+export const validateToken = async (token) => {
+  return await validateJwt(token, jwtKey, false);
+}
 
 export const login = async context => {
   const { value: { login, password } } = await context.request.body();
@@ -10,7 +25,8 @@ export const login = async context => {
   const existingAccount = db.accounts
     .find(acc => acc.login === login && acc.password === hashedPassword);
   if (existingAccount) {
-    context.response.body = JSON.stringify({ login, success: true });
+    const jwt = makeJwt(jwtHeader, {login}, jwtKey)
+    context.response.body = JSON.stringify({ login, jwt, success: true });
   } else {
     context.response.body = JSON
       .stringify({ success: false, error: "Wrong login or password" });
