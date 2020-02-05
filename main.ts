@@ -1,18 +1,14 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import { authRouter } from "./src/auth.ts";
+import { setupAuth } from "./src/auth.ts";
 
-const homeRouter = new Router();
-homeRouter
+const router = new Router();
+setupAuth(router)
   .get("/", context => {
     context.response.body = "Hello Deno PaaS!";
   });
 
 const app = new Application();
-// home route
-app.use(homeRouter.routes());
-app.use(homeRouter.allowedMethods());
-// auth routes
-app.use(authRouter.routes());
-app.use(authRouter.allowedMethods());
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.listen({ port: 8000 });

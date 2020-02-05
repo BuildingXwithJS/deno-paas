@@ -1,11 +1,8 @@
-import { Router } from "https://deno.land/x/oak/mod.ts";
 import { hmac } from "https://denopkg.com/chiefbiiko/hmac/mod.ts";
 import db from "./db.ts";
 
 const secureKey = "1234567890";
 const hash = password => hmac("sha256", secureKey, password, "utf8", "hex");
-
-export const authRouter = new Router();
 
 export const login = async context => {
   const { value: { login, password } } = await context.request.body();
@@ -27,6 +24,9 @@ export const register = async context => {
   context.response.body = JSON.stringify({ login, success: true });
 };
 
-authRouter
-  .post("/login", login)
-  .post("/register", register);
+export const setupAuth = (router) => {
+  router
+    .post("/login", login)
+    .post("/register", register);
+  return router;
+};
