@@ -8,7 +8,7 @@ The idea is to use Deno to deploy third-party code running within one Deno insta
 The aim is to rely on using V8 Isolates with bootstrapped Deno environment, rather than running via separate processes.
 
 Current approach:
-- Use native plugin for Deno that will expose Deno worker in the similar manner to how Deno [runs](https://github.com/denoland/deno/blob/master/cli/lib.rs#L380) scripts
+Build a basic REST API with auth and everything first, run code via processes, migrate to isolates later.
 
 Approaches that failed:
 - Dynamic import:
@@ -16,14 +16,20 @@ Approaches that failed:
   - runs on the same (shares global scope)
   - cannot be controlled by parent
 - Worker:
-  - didn't work
+  - didn't work (still WIP in Deno)
   - cannot be controlled by parent
+- Deno native plugin: 
+  - didn't work (not enough public APIs)
+  - Deno will expose Deno Worker later on natively
 
 
 ## Related links
 
 - [Deno](https://deno.land/)
 - [Deno native plugins PR](https://github.com/denoland/deno/pull/3372)
+- [djwt](https://github.com/timonson/djwt/) - JWT lib for Deno
+- [oak](https://github.com/oakserver/oak/) - Web framework for Deno
+- [hmac](https://github.com/chiefbiiko/hmac/) - hashing lib for Deno
 
 ## Useful links
 
