@@ -1,5 +1,5 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import authRouter from "./src/auth.ts";
+import { authRouter } from "./src/auth.ts";
 
 const homeRouter = new Router();
 homeRouter
