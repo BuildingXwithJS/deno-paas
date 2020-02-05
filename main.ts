@@ -14,7 +14,7 @@ app.use(router.allowedMethods());
 // authorization middleware
 app.use(async (ctx, next) => {
   const authorization = ctx.request.headers.get("Authorization");
-  const token = authorization.replace('Bearer ', '');
+  const token = authorization.replace("Bearer ", "");
   const tokenValid = await validateToken(token);
 
   if (tokenValid) {
@@ -22,12 +22,12 @@ app.use(async (ctx, next) => {
     return;
   }
 
-  ctx.response.body = JSON.stringify({error: 'Not authorized'});
+  ctx.response.body = JSON.stringify({ error: "Not authorized" });
 });
 
 // protected routes
 const protectedRouter = new Router();
-protectedRouter.get('/protected', context => {
+protectedRouter.get("/protected", context => {
   context.response.body = "Hello protected route!";
 });
 app.use(protectedRouter.routes());
