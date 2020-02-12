@@ -1,5 +1,6 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 import { setupAuth, validateToken } from "./src/auth.ts";
+import { setupDeploy } from "./src/deploy.ts";
 
 const router = new Router();
 setupAuth(router)
@@ -30,6 +31,9 @@ const protectedRouter = new Router();
 protectedRouter.get("/protected", context => {
   context.response.body = "Hello protected route!";
 });
+// add deploy routes
+setupDeploy(protectedRouter);
+// attach router to the app
 app.use(protectedRouter.routes());
 app.use(protectedRouter.allowedMethods());
 
